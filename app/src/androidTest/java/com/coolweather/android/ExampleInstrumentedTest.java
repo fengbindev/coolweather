@@ -17,10 +17,23 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
     @Test
-    public void useAppContext() throws Exception {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+    public static void main(String[] args){
+        sendOkHttpRequest("http://guolin.tech/api/china", new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
 
-        assertEquals("com.coolweather.android", appContext.getPackageName());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().toString();
+                System.out.print(responseText);
+            }
+        });
+    }
+    public static void sendOkHttpRequest(String address,okhttp3.Callback callback){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(address).build();
+        client.newCall(request).enqueue(callback);
     }
 }
